@@ -1,0 +1,88 @@
+---
+title: "The Science of Decisions Project (Statistics)"
+author: "Raju Singh"
+date: "September 1, 2017"
+output:
+  html_document: default
+---
+
+# Abstract
+In this paper I use R to conduct a t-test on stroop effect.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+# Reading the CSV
+
+```{r}
+stroop <- read.csv('stroopdata.csv')
+stroop
+```
+
+### Q1. What is our independent variable? What is our dependent variable?
+
+INDEPENDENT - Word Condition (Congruent or Incongruent)
+
+DEPENDENT - Response Time in seconds
+
+### Q2. What is an appropriate set of hypotheses for this task? What kind of statistical test do you expect to perform? Justify your choices.
+
+Ho - Null Hypothesis: ( ??i - ??c = 0 ) 
+There is no significant difference in the population average response time in viewing the congruent(c) words vs viewing the incongruent(i) words.
+
+Ha - Alternative Hypothesis: ( ??i - ??c ??? 0 ) 
+There is a significant difference, positive or negative, in the population average response times.
+
+The Dependent Samples t-Test is the appropriate statistical test as the same subjects are assigned two different conditions. The different conditions are dependent because, in theory, by doing the first test you have some practice doing it and you might have an unfair advantage due to this learning effect in doing the similar type of test second. In addition, we don't have any population parameters provided (so a z-test would not be appropriate here).
+
+### Q3. Report some descriptive statistics regarding this dataset. Include at least one measure of central tendency and at least one measure of variability.
+
+```{r}
+Congruent.mean <- mean(stroop$Congruent) #14.05113
+Incongruent.mean <- mean(stroop$Incongruent) #22.01592
+sd.Congruent <- sd(stroop$Congruent) #3.559358
+sd.Incongruent <- sd(stroop$Incongruent) #4.797057
+```
+
+Average time of Congruent group is 14.051, and average time of Incongruent group is 22.016, the latter is larger. 
+The deviances are 3.559 and 4.797. The times in Incongruent group vary more.
+
+### Q4. Provide one or two visualizations that show the distribution of the sample data. Write one or two sentences noting what you observe about the plot or plots.
+
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+p1 <- ggplot(aes(x=Congruent), data=stroop) + geom_histogram(fill='blue', color='white', binwidth=2)
+p2 <- ggplot(aes(x=Incongruent), data=stroop) + geom_histogram(fill='red', color='white', binwidth=2)
+grid.arrange(p1, p2)
+```
+
+```{r}
+stroop2 <- rbind(data.frame(time=stroop$Congruent, condition="Congruent"),
+                 data.frame(time=stroop$Incongruent, condition="Incongruent"))
+ggplot(aes(x=condition, y=time), data=stroop2) + geom_boxplot()
+```
+
+From histogram of Congruent time and Incongruent time we can see that the data is approximately normally distributed, from box plot we can see that most time in Incongruent group is greater than time in Congruent group.
+
+### Q5. Now, perform the statistical test and report your results. What is your confidence level and your critical statistic value? Do you reject the null hypothesis or fail to reject it? Come to a conclusion in terms of the experiment task. Did the results match up with your expectations?
+
+Perform t-test and interpret results
+
+```{r}
+n <- dim(stroop)[1] #24
+diff <- Incongruent.mean - Congruent.mean #7.964792
+s <- sd(stroop$Incongruent - stroop$Congruent) #4.864827
+standard.error <- s / sqrt(n) #0.9930286
+t.statistic <- diff / standard.error #8.020707
+t.critical <- qt(.99, df=n-1) #2.499867
+p.value <- 1 - pt(t.statistic, df=n-1) #2.0515e-08
+```
+
+T critical value for ??=0.01 is 2.5, which is smaller than our t statistic value 8.02, so we reject the null hypothesis. We could also decide by looking p value, p value for this test is 2.05×10???8, which is a lot smaller than ????. We reject the null hypothesis, thus we accept the alternative hypothesis, that is "Average of time population in Incongruent group is greater than average of time population in Congruent group". This means that words do help people to recognize color in Congruent group or words do interfere people to recognize color in Incongruent group.
+
+## Conclusion
+
+Although we get conclusion "Average of time population in Incongruent group is greater than average of time population in Congruent group", actually we don't know weather words help people to recognize color in Congruent group, or interfere people to recognize color in Incongruent group, or both. It would better have a neutral group to help us decide.
