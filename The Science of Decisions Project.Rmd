@@ -28,10 +28,10 @@ DEPENDENT - Response Time in seconds
 
 ### Q2. What is an appropriate set of hypotheses for this task? What kind of statistical test do you expect to perform? Justify your choices.
 
-Ho - Null Hypothesis: ( ??i - ??c = 0 ) 
+Ho - Null Hypothesis: ( &mu;i - &mu;c = 0 ) 
 There is no significant difference in the population average response time in viewing the congruent(c) words vs viewing the incongruent(i) words.
 
-Ha - Alternative Hypothesis: ( ??i - ??c ??? 0 ) 
+Ha - Alternative Hypothesis: ( &mu;i - &mu;c &ne; 0 ) 
 There is a significant difference, positive or negative, in the population average response times.
 
 The Dependent Samples t-Test is the appropriate statistical test as the same subjects are assigned two different conditions. The different conditions are dependent because, in theory, by doing the first test you have some practice doing it and you might have an unfair advantage due to this learning effect in doing the similar type of test second. In addition, we don't have any population parameters provided (so a z-test would not be appropriate here).
@@ -81,7 +81,7 @@ t.critical <- qt(.99, df=n-1) #2.499867
 p.value <- 1 - pt(t.statistic, df=n-1) #2.0515e-08
 ```
 
-T critical value for ??=0.01 is 2.5, which is smaller than our t statistic value 8.02, so we reject the null hypothesis. We could also decide by looking p value, p value for this test is 2.05×10???8, which is a lot smaller than ????. We reject the null hypothesis, thus we accept the alternative hypothesis, that is "Average of time population in Incongruent group is greater than average of time population in Congruent group". This means that words do help people to recognize color in Congruent group or words do interfere people to recognize color in Incongruent group.
+T critical value for &alpha; =0.01 is 2.5, which is smaller than our t statistic value 8.02, so we reject the null hypothesis. We could also decide by looking p value, p value for this test is 2.05×10???8, which is a lot smaller than &alpha;. We reject the null hypothesis, thus we accept the alternative hypothesis, that is "Average of time population in Incongruent group is greater than average of time population in Congruent group". This means that words do help people to recognize color in Congruent group or words do interfere people to recognize color in Incongruent group.
 
 ## Conclusion
 
